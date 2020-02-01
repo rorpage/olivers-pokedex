@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Oliver's Pokedex</title>
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <style>
+      body {
+        font-family: 'Luckiest Guy' !important;
+      }
+
+      .title {
+        color: red;
+        font-size: 4.2rem;
+      }
+
+      h2 {
+        color: black;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .card-title {
+        font-weight: 700 !important;
+      }
+
+      #title-image {
+        max-height: 100px;
+        max-width: 100px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="title col">Oliver's Pokedex</div>
+        <img id="title-image" class="col" src="https://img.pokemondb.net/artwork/large/charizard.jpg" />
+      </div>
+      <hr />
+      <div>
+        Pokemon ID:
+        <div class="input-field inline">
+          <input id="pokemon-id" type="text" placeholder="Please enter an ID" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="card">
+            <div class="card-image">
+              <img id="pokemon-image" class="responsive-img" src="" />
+            </div>
+            <div class="card-content">
+              <span id="pokemon-name" class="card-title black-text">Loading...</span>
+              <div id="pokemon-description"></div>
+              <div>
+                <span id="type-label"></span>: <span id="pokemon-types"></span>
+              </div>
+              <div>
+                Height: <span id="pokemon-height"></span>
+              </div>
+              <div>
+                Weight: <span id="pokemon-weight"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script>
+        function loadPokemon(id) {
+          $.ajax({
+            url: `https://pokeapi.co/api/v2/pokemon/${id}/`,
+            success: function(result) {
+              $("#pokemon-name").html(result.name);
+
+              var imageUrl = `https://img.pokemondb.net/artwork/large/${result.name}.jpg`;
+              $("#pokemon-image").attr("src", imageUrl);
+
+              var height = (result.height * 3.93701).toFixed(0);
+              var feet = Math.floor(height / 12);
+              var inches = height % 12;
+              $("#pokemon-height").html(feet + "' " + inches + "\"");
+
+              var weight = (result.weight * 0.220462).toFixed(0);
+              $("#pokemon-weight").html(weight + " lbs");
+
+              var types = [];
+              result.types.forEach(function (type) {
+                types.push(type.type.name);
+              });
+
+              $("#type-label").html(types.length === 1 ? 'Type' : 'Types');
+              $("#pokemon-types").html(types.join(', '));
+            },
+            error: function(result) {
+              $("#pokemon-name").html("NOPE");
+            }
+          });
+        }
+
+        $(function() {
+          const pokemonIdInput = $("#pokemon-id");
+          loadPokemon(pokemonIdInput.val() || 1);
+
+          pokemonIdInput.change(function () {
+            loadPokemon(pokemonIdInput.val() || 1);
+          });
+        });
+      </script>
+  </body>
+</html>
