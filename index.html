@@ -43,9 +43,9 @@
       </div>
       <hr />
       <div>
-        Pokemon ID:
+        Pokemon name or ID:
         <div class="input-field inline">
-          <input id="pokemon-id" type="text" placeholder="Please enter an ID" />
+          <input id="pokemon-id" type="text" />
         </div>
       </div>
       <div class="row">
@@ -56,7 +56,6 @@
             </div>
             <div class="card-content">
               <span id="pokemon-name" class="card-title black-text">Loading...</span>
-              <div id="pokemon-description"></div>
               <div>
                 <span id="type-label"></span>: <span id="pokemon-types"></span>
               </div>
@@ -76,7 +75,7 @@
           $.ajax({
             url: `https://pokeapi.co/api/v2/pokemon/${id}/`,
             success: function(result) {
-              $("#pokemon-name").html(result.name);
+              $("#pokemon-name").html(`${result.name} (#${result.id})`);
 
               var imageUrl = `https://img.pokemondb.net/artwork/large/${result.name}.jpg`;
               $("#pokemon-image").attr("src", imageUrl);
