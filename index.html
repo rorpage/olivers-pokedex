@@ -105,10 +105,10 @@
 
         $(function() {
           const pokemonIdInput = $("#pokemon-id");
-          loadPokemon(pokemonIdInput.val() || 1);
+          loadPokemon(pokemonIdInput.val().toLowerCase() || 1);
 
           pokemonIdInput.change(function () {
-            loadPokemon(pokemonIdInput.val() || 1);
+            loadPokemon(pokemonIdInput.val().toLowerCase() || 1);
           });
         });
       </script>
